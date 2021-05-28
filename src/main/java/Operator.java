@@ -1,8 +1,6 @@
 public class Operator implements Runnable {
     // Очередь звонков
     private ATS ats;
-    // Время ответа опреатора
-    private long answerTime;
 
     protected Operator(ATS ats) {
         this.ats = ats;
@@ -11,6 +9,8 @@ public class Operator implements Runnable {
     @Override
     public void run() {
         Call nowCall;
+        // Время ответа опреатора
+        long answerTime;
         String nameOperator = Thread.currentThread().getName();
         while (true) {
             answerTime = (long) (Math.random() * 500 + 100);
@@ -22,10 +22,9 @@ public class Operator implements Runnable {
             try {
                 Thread.sleep(answerTime);
             } catch (InterruptedException ex) {
-                Thread.currentThread().interrupt();
+                System.out.println(ex.getMessage());
             }
             System.out.println(nameOperator + " в очереди ещё " + ats.getQueueSize() + " звонков.");
         }
-        Thread.currentThread().interrupt();
     }
 }

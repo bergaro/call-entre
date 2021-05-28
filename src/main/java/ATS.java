@@ -1,13 +1,18 @@
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
-
+/**
+ * Использую LinkedBlockingQueue<> - из-за того, что в ней
+ * имеется 2 ReentrantLock, т.е. один на чтение, другой на запись.
+ * Следовательно, при добавлении нового вызова не блокируется получение вызова
+ * из очереди для оператора. (Ну по крайней мере так у меня в голове уложилось =) )
+ */
 public class ATS implements Runnable {
     // Доступность АТС в секундах
-    private final int atsWork = 15; // секунд
+    private int atsWork = 15; // секунд
     // Кол-во звонков генерируемых в секнуду
-    private final int callsPerSecond = 60;
+    private int callsPerSecond = 60;
     // Технический таймаут для выдерживания 1 сек между добавлениями звонков
-    private final int expectation = 1000;
+    private int expectation = 1000;
 
     private static ATS instance;
     // Очередь АТС (линия соединения с оператором)
