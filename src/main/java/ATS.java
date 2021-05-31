@@ -1,18 +1,17 @@
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 /**
+ * ПРИЧИНЫ ИСПОЛЬЗОВАНИЯ LinkedBlockingQueue<>
  * Использую LinkedBlockingQueue<> - из-за того, что в ней
  * имеется 2 ReentrantLock, т.е. один на чтение, другой на запись.
- * Следовательно, при добавлении нового вызова не блокируется получение вызова
- * из очереди для оператора. (Ну по крайней мере так у меня в голове уложилось =) )
+ * Следовательно, при добавлении нового вызова не блокируется получение вызова (ответ на вызов)
+ * из очереди для оператора. (Ну по крайней мере так у меня в голове уложилось)
  */
 public class ATS implements Runnable {
     // Доступность АТС в секундах
-    private int atsWork = 15; // секунд
+    private final static int ATS_WORK = 15; // секунд
     // Кол-во звонков генерируемых в секнуду
-    private int callsPerSecond = 60;
-    // Технический таймаут для выдерживания 1 сек между добавлениями звонков
-    private int expectation = 1000;
+    private final static int CALLS_PER_SECOND = 60;
 
     private static ATS instance;
     // Очередь АТС (линия соединения с оператором)
@@ -30,8 +29,10 @@ public class ATS implements Runnable {
      * Добавление звонков в очередь
      */
     private void setCallToAts() {
-        for (int i = 0; i < atsWork; i++) {
-            for (int j = 0; j < callsPerSecond; j++) {
+        // Технический таймаут для выдерживания 1 сек между добавлениями звонков
+        int expectation = 1000;
+        for (int i = 0; i < ATS_WORK; i++) {
+            for (int j = 0; j < CALLS_PER_SECOND; j++) {
                 atsLine.add(new Call());
             }
             try {
