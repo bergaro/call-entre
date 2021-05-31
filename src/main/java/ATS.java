@@ -15,7 +15,7 @@ public class ATS implements Runnable {
 
     private static ATS instance;
     // Очередь АТС (линия соединения с оператором)
-    private Queue<Call> atsLine = new LinkedBlockingQueue<>();
+    private final static Queue<Call> ATS_LINE = new LinkedBlockingQueue<>();
 
     private ATS() { }
 
@@ -33,7 +33,7 @@ public class ATS implements Runnable {
         int expectation = 1000;
         for (int i = 0; i < ATS_WORK; i++) {
             for (int j = 0; j < CALLS_PER_SECOND; j++) {
-                atsLine.add(new Call());
+                ATS_LINE.add(new Call());
             }
             try {
                 Thread.sleep(expectation);
@@ -46,11 +46,11 @@ public class ATS implements Runnable {
     }
 
     protected int getQueueSize() {
-        return atsLine.size();
+        return ATS_LINE.size();
     }
 
     protected Call getCallFromQueue() {
-        return atsLine.poll();
+        return ATS_LINE.poll();
     }
 
     @Override
